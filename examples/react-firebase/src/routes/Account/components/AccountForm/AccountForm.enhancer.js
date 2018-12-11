@@ -1,4 +1,9 @@
-import { reduxForm } from 'redux-form'
-import { ACCOUNT_FORM_NAME } from 'constants'
+import PropTypes from 'prop-types'
+import { compose } from 'recompose'
+import { withStyles } from '@material-ui/core/styles'
+import styles from './AccountForm.styles'
 
-export default reduxForm({ form: ACCOUNT_FORM_NAME })
+export default compose(
+  // Add styles as classes.props
+  withStyles(styles)
+)

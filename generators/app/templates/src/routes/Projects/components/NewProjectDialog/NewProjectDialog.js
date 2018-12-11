@@ -40,7 +40,7 @@ NewProjectDialog.propTypes = {
   onRequestClose: PropTypes.func.isRequired
 }
 
-export default NewProjectDialog<% } %><% if (!includeRedux) { %>export default class NewProjectDialog extends Component {
+export default NewProjectDialog<% } %><% if (!includeRedux) { %>export default class NewProjectDialog extends React.Component {
   static propTypes = {
     open: PropTypes.bool,
     onCreateClick: PropTypes.func.isRequired
@@ -72,33 +72,24 @@ export default NewProjectDialog<% } %><% if (!includeRedux) { %>export default c
     const { error } = this.state
 
     return (
-      <Dialog
-        title='New Project'
-        open={open}
-        onRequestClose={onRequestClose}
-        contentClassName={classes.container}
-        actions={[
-          <FlatButton
-            label='Cancel'
-            secondary
-            onTouchTap={onRequestClose}
-          />,
-          <FlatButton
-            label='Create'
-            primary
-            onTouchTap={this.handleSubmit}
-          />
-        ]}
-      >
-        <div className={classes.inputs}>
-          <TextField
-            hintText='exampleProject'
-            floatingLabelText='Project Name'
-            ref='projectNameField'
-            onChange={this.handleInputChange}
-            errorText={error || null}
-          />
-        </div>
+      <Dialog open={open} onClose={onRequestClose}>
+        <DialogTitle id="new-project-dialog-title">New Project</DialogTitle>
+          <DialogContent>
+            <TextField
+              name="name"
+              onChange={this.handleInputChange}
+              component={TextField}
+              label="Project Name"
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={onRequestClose} color="secondary">
+              Cancel
+            </Button>
+            <Button type="submit" color="primary">
+              Create
+            </Button>
+          </DialogActions>
       </Dialog>
     )
   }

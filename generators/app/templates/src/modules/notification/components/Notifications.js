@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { size } from 'lodash'
-import { connect } from 'react-redux'
-import { compose, renderNothing, branch } from 'recompose'
+import { compose, renderNothing, branch } from 'recompose'<% if (includeRedux) { %>
+import { connect } from 'react-redux'<% } %>
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
@@ -41,17 +41,19 @@ export const Notifications = ({
 
 Notifications.propTypes = {
   allIds: PropTypes.array.isRequired,
-  byId: PropTypes.object.isRequired,<% if (materialv1) { %>
-  classes: PropTypes.object.isRequired,<% } %>
+  byId: PropTypes.object.isRequired,
+  classes: PropTypes.object.isRequired,
   dismissNotification: PropTypes.func.isRequired
 }
 
-const enhance = compose(
+const enhance = compose(<% if (includeRedux) { %>
   connect(
     ({ notifications: { allIds, byId } }) => ({ allIds, byId }),
     actions
-  ),
-  branch(props => !size(props.allIds), renderNothing), // only render if notifications exist
+  ),<% } %>
+  // Only render if notifications exist
+  branch(props => !size(props.allIds), renderNothing),
+  // Add styles as props.classes
   withStyles(styles)
 )
 

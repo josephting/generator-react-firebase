@@ -1,9 +1,9 @@
-import { compose, withHandlers } from 'recompose'
-import { withStore } from 'utils/components'
+import { compose, withHandlers } from 'recompose'<% if (includeRedux) { %>
+import { withStore } from 'utils/components'<% } %>
 import * as actions from '../actions'
 
-const withNotifications = compose(
-  withStore,
+const withNotifications = compose(<% if (includeRedux) { %>
+  withStore,<% } %>
   withHandlers({
     showError: ({ store }) => err => actions.showError(err)(store.dispatch),
     showSuccess: ({ store }) => err => actions.showSuccess(err)(store.dispatch),

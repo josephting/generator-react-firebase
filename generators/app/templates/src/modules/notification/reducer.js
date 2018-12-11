@@ -1,4 +1,4 @@
-import { combineReducers } from 'redux'
+<% if (includeRedux) { %>import { combineReducers } from 'redux'<% } %>
 import { without, omit } from 'lodash'
 import { NOTIFICATION_SHOW, NOTIFICATION_DISMISS } from './actionTypes'
 
@@ -38,6 +38,8 @@ const byId = (state = {}, action) => {
   }
 }
 
-export const notifications = combineReducers({ byId, allIds })
+export const notifications = <% if (includeRedux) { %>combineReducers({ byId, allIds })<% } %><% if (!includeRedux) { %>(state, action) => {
+  console.log('notification reducer not suppoerted without redux', state, action)
+}<% } %>
 
 export default notifications

@@ -1,10 +1,11 @@
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { LIST_PATH } from 'constants/paths'
-import { withHandlers, withStateHandlers, setDisplayName } from 'recompose'
+<% if (includeRedux) { %>import { connect } from 'react-redux'<% } %>
 import { withRouter } from 'react-router-dom'
-import { <% if (includeRedux && includeFirestore) { %>firestoreConnect<% } %><% if (includeRedux && !includeFirestore) { %>firebaseConnect<% } %> } from 'react-redux-firebase'
+import { compose, withHandlers, withStateHandlers, setDisplayName } from 'recompose'<% if (includeRedux && includeFirestore) { %>
+import { firestoreConnect } from 'react-redux-firebase'<% } %><% if (includeRedux && !includeFirestore) { %>
+import { firebaseConnect } from 'react-redux-firebase'<% } %><% if (!includeRedux) { %>
+import firebase from 'firebase/app'<% } %>
 import { withStyles } from '@material-ui/core/styles'
+import { LIST_PATH } from 'constants/paths'
 import { withNotifications } from 'modules/notification'
 import { spinnerWhileLoading } from 'utils/components'
 import { UserIsAuthenticated } from 'utils/router'
@@ -12,15 +13,16 @@ import styles from './ProjectsPage.styles'
 
 export default compose(
   // Set component display name (more clear in dev/error tools)
-  setDisplayName('EnhancedProjectsPage'),
+  setDisplayName('EnhancedProjectsPage'),<% if (includeRedux) { %>
   // redirect to /login if user is not logged in
   UserIsAuthenticated,
   // Map auth uid from state to props
   connect(({ firebase: { auth: { uid } } }) => ({ uid })),
   // Wait for uid to exist before going further
   spinnerWhileLoading(['uid']),
+  <% } %><% if (includeRedux && !includeFirestore) { %>
   // Create listeners based on current users UID
-  <% if (includeRedux && !includeFirestore) { %>firebaseConnect(({ params, uid }) => [
+  firebaseConnect(({ params, uid }) => [
     {
       path: 'projects',
       queryParams: ['orderByChild=createdBy', `equalTo=${uid}`]
@@ -39,9 +41,9 @@ export default compose(
   // Map projects from state to props
   connect(({ firestore: { ordered } }) => ({
     projects: ordered.projects
-  })),<% } %>
+  })),<% } %><% if (includeRedux) { %>
   // Show loading spinner while projects and collabProjects are loading
-  spinnerWhileLoading(['projects']),
+  spinnerWhileLoading(['projects']),<% } %>
   // Add props.router
   withRouter,
   // Add props.showError and props.showSuccess
@@ -62,8 +64,8 @@ export default compose(
   // Add handlers as props
   withHandlers({
     addProject: props => newInstance => {
-      const { <% if (includeRedux && includeFirestore) { %>firestore<% } %><% if (includeRedux && !includeFirestore) { %>firebase<% } %>, uid, showError, showSuccess, toggleDialog } = props
-      if (!uid) {
+      const { showError, showSuccess, toggleDialog<% if (includeRedux) { %>uid, <% } %><% if (includeRedux && includeFirestore) { %>, firestore<% } else { %>, firebase<% } %> } = props
+      if (!<% if (!includeRedux) { %>firebase.auth().currentUser<% } else { %>uid<% } %>) {
         return showError('You must be logged in to create a project')
       }
       return <% if (includeRedux && includeFirestore) { %>firestore
@@ -79,6 +81,18 @@ export default compose(
           ...newInstance,
           createdBy: uid,
           createdAt: firebase.database.ServerValue.TIMESTAMP
+        })<% } %><% if (!includeRedux && !includeFirestore) { %>firebase.database()
+        .ref('projects')
+        .push({
+          ...newInstance,
+          createdBy: firebase.auth().currentUser,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
+        })<% } %><% if (!includeRedux && includeFirestore) { %>firebase.firestore()
+        .collection('projects')
+        .add({
+          ...newInstance,
+          createdBy: firebase.auth().currentUser,
+          createdAt: firebase.database.ServerValue.TIMESTAMP
         })<% } %>
         .then(() => {
           toggleDialog()
@@ -91,13 +105,18 @@ export default compose(
         })
     },
     deleteProject: props => projectId => {
-      const { <% if (includeRedux && includeFirestore) { %>firestore<% } %><% if (includeRedux && !includeFirestore) { %>firebase<% } %>, showError, showSuccess } = props
+      const { showError, showSuccess<% if (includeRedux && includeFirestore) { %>, firestore<% } %><% if (includeRedux && !includeFirestore) { %>, firebase<% } %> } = props
       return <% if (includeRedux && includeFirestore) { %>firestore
         .delete({ collection: 'projects', doc: projectId })<% } %><% if (includeRedux && !includeFirestore) { %>firebase
-        .remove(`projects/${projectId}`)<% } %>
+        .remove(`projects/${projectId}`)<% } %><% if (!includeRedux && !includeFirestore) { %>firebase.database()
+        .ref(`projects/${projectId}`)
+        .remove()<% } %><% if (!includeRedux && includeFirestore) { %>firebase.firestore()
+        .collection('projects')
+        .doc(projectId)
+        .remove()<% } %>
         .then(() => showSuccess('Project deleted successfully'))
         .catch(err => {
-          console.error('Error:', err) // eslint-disable-line no-console
+          console.error('Error deleting project:', err) // eslint-disable-line no-console
           showError(err.message || 'Could not delete project')
           return Promise.reject(err)
         })

@@ -1,52 +1,37 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'redux-form'
-import Button from '@material-ui/core/Button'
-import { TextField } from 'redux-form-material-ui'
+import TextField from '@material-ui/core/TextField'
 import ProviderDataForm from '../ProviderDataForm'
-import classes from './AccountForm.scss'
 
-export const AccountForm = ({
-  account,
-  handleSubmit,
-  submitting,
-  pristine
-}) => (
-  <form className={classes.container} onSubmit={handleSubmit}>
+const AccountForm = ({ classes, account }) => (
+  <div className={classes.container}>
     <h4>Account</h4>
-    <div className={classes.fields}>
-      <Field
-        fullWidth
-        name="displayName"
-        component={TextField}
-        label="Display Name"
-      />
-      <Field name="email" label="Email" component={TextField} fullWidth />
-      <Field
-        name="avatarUrl"
-        label="Avatar Url"
-        component={TextField}
-        fullWidth
+    <div>
+      <TextField
+        floatingLabelText="Username"
       />
     </div>
-    {!!account &&
-      !!account.providerData && (
-        <div>
-          <h4>Linked Accounts</h4>
-          <ProviderDataForm providerData={account.providerData} />
-        </div>
-      )}
-    <Button color="primary" type="submit" disabled={pristine || submitting}>
-      {submitting ? 'Saving' : 'Save'}
-    </Button>
-  </form>
+    <div>
+      <TextField
+        hintText="someone@email.com"
+        floatingLabelText="Email"
+      />
+    </div>
+    <div>
+      <h4>Linked Accounts</h4>
+      {
+        account && account.providerData &&
+          <ProviderDataForm
+            providerData={account.providerData}
+          />
+      }
+    </div>
+  </div>
 )
 
 AccountForm.propTypes = {
-  account: PropTypes.object,
-  handleSubmit: PropTypes.func.isRequired,
-  pristine: PropTypes.bool.isRequired,
-  submitting: PropTypes.bool.isRequired
+  classes: PropTypes.object.isRequired, // from enhancer (withStyles)
+  account: PropTypes.object
 }
 
 export default AccountForm

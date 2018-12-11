@@ -1,29 +1,22 @@
-import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { withHandlers } from 'recompose'
-import { withFirebase } from 'react-redux-firebase'
-import { spinnerWhileLoading } from 'utils/components'
-import { withNotifications } from 'modules/notification'
-import { UserIsAuthenticated } from 'utils/router'
+import PropTypes from 'prop-types'
+import { compose, withHandlers } from 'recompose'
+import { withStyles } from '@material-ui/core/styles'
+import firebase from 'firebase/app'
+import styles from './AccountPage.styles'
 
 export default compose(
-  UserIsAuthenticated, // redirect to /login if user is not authenticated
-  withFirebase,
-  withNotifications,
-  connect(({ firebase: { profile } }) => ({
-    profile,
-    avatarUrl: profile.avatarUrl
-  })),
-  spinnerWhileLoading(['profile']),
+  // Add handlers as props
   withHandlers({
-    updateAccount: ({ firebase, showSuccess, showError }) => newAccount =>
-      firebase
-        .updateProfile(newAccount)
-        .then(() => showSuccess('Profile updated successfully'))
+    updateAccount: () => newAccount => {
+      return firebase.database()
+        .ref(`users/${firebase.auth().currentUser.uid}`)
+        .update(newAccount)
         .catch(error => {
-          showError('Error updating profile: ', error.message || error)
           console.error('Error updating profile', error.message || error) // eslint-disable-line no-console
           return Promise.reject(error)
         })
-  })
+    }
+  }),
+  // Add styles as props.classes
+  withStyles(styles)
 )

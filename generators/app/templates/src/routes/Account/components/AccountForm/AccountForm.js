@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import { TextField } from 'redux-form-material-ui'<% } %><% if (!includeRedux && !materialv1) { %>import TextField from 'material-ui/TextField'<% } %><% if (!includeRedux && materialv1) { %>import TextField from '@material-ui/core/TextField'<% } %>
 import ProviderDataForm from '../ProviderDataForm'
 
-<% if (includeRedux) { %>export const AccountForm = ({
+<% if (includeRedux) { %>const AccountForm = ({
   account,
   handleSubmit,
   submitting,
@@ -49,7 +49,7 @@ AccountForm.propTypes = {
   submitting: PropTypes.bool.isRequired // from enhancer (reduxForm)
 }
 
-export default AccountForm<% } %><% if (!includeRedux) { %>export const AccountForm = ({ account, handleSubmit }) => (
+export default AccountForm<% } %><% if (!includeRedux) { %>const AccountForm = ({ classes, account }) => (
   <div className={classes.container}>
     <h4>Account</h4>
     <div>
@@ -76,8 +76,8 @@ export default AccountForm<% } %><% if (!includeRedux) { %>export const AccountF
 )
 
 AccountForm.propTypes = {
-  account: PropTypes.object,
-  handleSubmit: PropTypes.func
+  classes: PropTypes.object.isRequired, // from enhancer (withStyles)
+  account: PropTypes.object
 }
-export default AccountForm
-<% } %>
+
+export default AccountForm<% } %>

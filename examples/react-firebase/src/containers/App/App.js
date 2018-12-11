@@ -1,23 +1,24 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { browserHistory, Router } from 'react-router'
+import { BrowserRouter as Router } from 'react-router-dom'
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles'
-import { Provider } from 'react-redux'
+import Firebase from 'firebase'
 import ThemeSettings from 'theme'
+import { firebase as config } from '../../config'
 
 const theme = createMuiTheme(ThemeSettings)
 
-const App = ({ routes, store }) => (
-  <MuiThemeProvider theme={theme}>
-    <Provider store={store}>
-      <Router history={browserHistory}>{routes}</Router>
-    </Provider>
-  </MuiThemeProvider>
+const { apiKey, authDomain, databaseURL, storageBucket } = config
+
+// Initialize Firebase
+Firebase.initializeApp({ apiKey, authDomain, databaseURL, storageBucket })
+
+const App = ({ routes }) => (
+  <Router>{routes}</Router>
 )
 
 App.propTypes = {
-  routes: PropTypes.object.isRequired,
-  store: PropTypes.object.isRequired
+  routes: PropTypes.object.isRequired
 }
 
 export default App

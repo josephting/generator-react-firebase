@@ -1,13 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { size } from 'lodash'
-import { connect } from 'react-redux'
-import { pure, compose, renderNothing, branch } from 'recompose'
+import { compose, renderNothing, branch } from 'recompose'
 import Snackbar from '@material-ui/core/Snackbar'
 import IconButton from '@material-ui/core/IconButton'
 import CloseIcon from '@material-ui/icons/Close'
-import * as actions from '../actions'
 import { withStyles } from '@material-ui/core/styles'
+import * as actions from '../actions'
 
 const styles = {
   buttonRoot: {
@@ -46,9 +45,11 @@ Notifications.propTypes = {
   dismissNotification: PropTypes.func.isRequired
 }
 
-export default compose(
-  pure,
-  withStyles(styles),
-  connect(({ notifications: { allIds, byId } }) => ({ allIds, byId }), actions),
-  branch(props => !size(props.allIds), renderNothing) // only render if notifications exist
-)(Notifications)
+const enhance = compose(
+  // Only render if notifications exist
+  branch(props => !size(props.allIds), renderNothing),
+  // Add styles as props.classes
+  withStyles(styles)
+)
+
+export default enhance(Notifications)

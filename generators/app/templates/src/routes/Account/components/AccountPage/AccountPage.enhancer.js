@@ -1,22 +1,27 @@
 import PropTypes from 'prop-types'
-import { withStyles } from '@material-ui/core/styles'
-<% if (includeRedux) { %>import { connect } from 'react-redux'
+import { compose, withHandlers<% if (includeRedux) { %>, setPropTypes<% } %> } from 'recompose'
+import { withStyles } from '@material-ui/core/styles'<% if (includeRedux) { %>
+import { connect } from 'react-redux'
 import { withFirebase } from 'react-redux-firebase'
-import { withHandlers, compose, setPropTypes } from 'recompose'
 import { spinnerWhileLoading } from 'utils/components'
 import { withNotifications } from 'modules/notification'
-import { UserIsAuthenticated } from 'utils/router'<% } %>
+import { UserIsAuthenticated } from 'utils/router'<% } %><% if (!includeRedux) { %>
+import firebase from 'firebase/app'<% } %>
 import styles from './AccountPage.styles'
 
 export default compose(
-  <% if (includeRedux) { %>UserIsAuthenticated, // redirect to /login if user is not authenticated
+  <% if (includeRedux) { %>UserIsAuthenticated, // Redirect to /login if user is not authenticated
+  // Add props.firebase
   withFirebase,
+  // Add props.showSuccess and props.showError
   withNotifications,
   connect(({ firebase: { profile } }) => ({
     profile,
     avatarUrl: profile.avatarUrl
   })),
+  // Show spinner while profile is loading
   spinnerWhileLoading(['profile']),
+  // Set propstypes of props used in HOCs
   setPropTypes({
     showSuccess: PropTypes.func.isRequired,
     showError: PropTypes.func.isRequired,
@@ -24,6 +29,7 @@ export default compose(
       updateProfile: PropTypes.func.isRequired
     })
   }),
+  // Add handlers as props
   withHandlers({
     updateAccount: ({ firebase, showSuccess, showError }) => newAccount =>
       firebase
@@ -34,7 +40,18 @@ export default compose(
           console.error('Error updating profile', error.message || error) // eslint-disable-line no-console
           return Promise.reject(error)
         })
+  }),<% } else { %>// Add handlers as props
+  withHandlers({
+    updateAccount: () => newAccount => {
+      return firebase.database()
+        .ref(`users/${firebase.auth().currentUser.uid}`)
+        .update(newAccount)
+        .catch(error => {
+          console.error('Error updating profile', error.message || error) // eslint-disable-line no-console
+          return Promise.reject(error)
+        })
+    }
   }),<% } %>
-  // add props.classes
+  // Add styles as props.classes
   withStyles(styles)
 )

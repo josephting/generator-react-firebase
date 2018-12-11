@@ -1,21 +1,21 @@
-import { connect } from 'react-redux'
+<% if (!includeRedux) { %>import { compose, setDisplayName } from 'recompose'<% } %><% if (includeRedux) { %>import { connect } from 'react-redux'
 import {
-  withHandlers,
   compose,
+  withHandlers,
   withProps,
   flattenProp,
   withStateHandlers,
   setDisplayName
 } from 'recompose'
-import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
-import { withFirebase, isEmpty, isLoaded } from 'react-redux-firebase'
+import { withFirebase, isEmpty, isLoaded } from 'react-redux-firebase'<% } %>
+import { withStyles } from '@material-ui/core/styles'
 import { ACCOUNT_PATH } from 'constants/paths'
 import styles from './Navbar.styles'
 
 export default compose(
   // Set component display name (more clear in dev/error tools)
-  setDisplayName('EnhancedNavbar'),
+  setDisplayName('EnhancedNavbar'),<% if (includeRedux) { %>
   // Map redux state to props
   connect(({ firebase: { auth, profile } }) => ({
     auth,
@@ -57,7 +57,7 @@ export default compose(
     authExists: isLoaded(auth) && !isEmpty(auth)
   })),
   // Flatten profile so that avatarUrl and displayName are props
-  flattenProp('profile'),
+  flattenProp('profile'),<% } %>
   // Add styles as classes prop
   withStyles(styles)
 )

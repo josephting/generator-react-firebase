@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'<% if (includeRedux) { %>
 import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'<% } %>
-import Button from '@material-ui/core/Button'
-<% if (!includeRedux) { %>import TextField from '@material-ui/core/TextField'<% } if (includeRedux) { %>import { required, validateEmail } from 'utils/form'<% } %>
+import { TextField } from 'redux-form-material-ui'<% } %><% if (!includeRedux) { %>
+import TextField from '@material-ui/core/TextField'<% } %>
+import Button from '@material-ui/core/Button'<% if (includeRedux) { %>
+import { required, validateEmail } from 'utils/form'<% } %>
 
 <% if (includeRedux) { %>const SignupForm = ({ pristine, submitting, handleSubmit, classes }) => (
   <form className={classes.root} onSubmit={handleSubmit}>
@@ -48,8 +49,8 @@ SignupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired // from enhancer (reduxForm - calls onSubmit)
 }
 
-export default SignupForm<% } %><% if (!includeRedux) { %>export const SignupForm = ({ handleSubmit }) => (
-  <form className={classes.container} onSubmit={handleSubmit}>
+export default SignupForm<% } %><% if (!includeRedux) { %>const SignupForm = ({ classes, handleSubmit }) => (
+  <form className={classes.root} onSubmit={handleSubmit}>
     <div>
       <TextField label='Username' />
     </div>
@@ -66,17 +67,19 @@ export default SignupForm<% } %><% if (!includeRedux) { %>export const SignupFor
       />
     </div>
     <div className={classes.submit}>
-      <RaisedButton
-        label='Signup'
-        primary
-        type='submit'
-        style={buttonStyle}
-      />
+      <Button
+        color="primary"
+        type="submit"
+        variant="contained"
+        onClick={handleSubmit}>
+        Login
+      </Button>
     </div>
   </form>
 )
 
 SignupForm.propTypes = {
+  classes: PropTypes.object.isRequired, // from enhancer (withStyles)
   handleSubmit: PropTypes.func
 }
 

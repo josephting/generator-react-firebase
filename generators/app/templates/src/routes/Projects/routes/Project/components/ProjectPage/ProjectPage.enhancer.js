@@ -1,20 +1,21 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types'<% if (includeRedux) { %>
 import { compose } from 'redux'
-import { connect } from 'react-redux'
-import { get } from 'lodash'
-<% if (includeRedux && includeFirestore) { %>import { firestoreConnect } from 'react-redux-firebase'<% } %><% if (includeRedux && !includeFirestore) { %>import { firebaseConnect } from 'react-redux-firebase'<% } %>
+import { connect } from 'react-redux'<% } %>
+import { get } from 'lodash'<% if (includeRedux && includeFirestore) { %>
+import { firestoreConnect } from 'react-redux-firebase'<% } %><% if (includeRedux && !includeFirestore) { %>
+import { firebaseConnect } from 'react-redux-firebase'<% } %>
 import { withStyles } from '@material-ui/core/styles'
 import { withRouter } from 'react-router-dom'
-import { setPropTypes, setDisplayName, withProps } from 'recompose'
+import { compose, setPropTypes, setDisplayName, withProps } from 'recompose'<% if (includeRedux) { %>
 import { spinnerWhileLoading } from 'utils/components'
-import { UserIsAuthenticated } from 'utils/router'
+import { UserIsAuthenticated } from 'utils/router'<% } %>
 import styles from './ProjectPage.styles'
 
 export default compose(
   // Set component display name (more clear in dev/error tools)
-  setDisplayName('EnhancedProjectPage'),
+  setDisplayName('EnhancedProjectPage'),<% if (includeRedux) { %>
   // Redirect to /login if user is not logged in
-  UserIsAuthenticated,
+  UserIsAuthenticated,<% } %>
   // Add props.match
   withRouter,
   // Set proptypes of props used in HOCs
@@ -35,15 +36,18 @@ export default compose(
       collection: 'projects',
       doc: projectId
     }
-  ]),
-  // Map projects from state to props
-  connect(({ firestore: { data } }, { projectId }) => ({<% } %><% if (includeRedux && !includeFirestore) { %>
-  firebaseConnect(({ projectId }) => [{ path: `projects/${projectId}` }]),
-  connect(({ firebase: { data } }, { projectId }) => ({<% } %>
+  ]),<% } %><% if (includeRedux && !includeFirestore) { %>
+  firebaseConnect(({ projectId }) => [{ path: `projects/${projectId}` }]),<% } %><% if (includeRedux && !includeFirestore) { %>
+  // Map projects from redux state to props
+  connect(({ firebase: { data } }, { projectId }) => ({
     project: get(data, `projects.${projectId}`)
-  })),
+  })),<% } %><% if (includeRedux && includeFirestore) { %>
+  // Map projects from redux state to props
+  connect(({ firestore: { data } }, { projectId }) => ({
+    project: get(data, `projects.${projectId}`)
+  })),<% } %><% if (includeRedux) { %>
   // Show loading spinner while project is loading
-  spinnerWhileLoading(['project']),
+  spinnerWhileLoading(['project']),<% } %>
   // Add styles as props.classes
   withStyles(styles)
 )

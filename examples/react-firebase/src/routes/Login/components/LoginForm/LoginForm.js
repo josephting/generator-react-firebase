@@ -1,43 +1,39 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Field } from 'redux-form'
-import { TextField } from 'redux-form-material-ui'
+import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
-import { required, validateEmail } from 'utils/form'
-import classes from './LoginForm.scss'
 
-export const LoginForm = ({ pristine, submitting, handleSubmit }) => (
-  <form className={classes.container} onSubmit={handleSubmit}>
-    <Field
-      name="email"
-      component={TextField}
-      label="Email"
-      validate={[required, validateEmail]}
-    />
-    <Field
-      name="password"
-      component={TextField}
-      label="Password"
-      type="password"
-      validate={required}
-    />
+const LoginForm = ({ classes, handleSubmit, error }) => (
+  <form className={classes.root} onSubmit={handleSubmit}>
+    <div>
+      <TextField
+        hintText='someone@email.com'
+        floatingLabelText='Email'
+        errorText={error || null}
+      />
+    </div>
+    <div>
+      <TextField
+        type='password'
+        floatingLabelText='Password'
+        errorText={error || null}
+      />
+    </div>
     <div className={classes.submit}>
       <Button
         color="primary"
         type="submit"
         variant="contained"
-        disabled={pristine || submitting}>
-        {submitting ? 'Loading' : 'Login'}
+        onClick={handleSubmit}>
+        Login
       </Button>
     </div>
   </form>
 )
 
 LoginForm.propTypes = {
-  onSubmit: PropTypes.func.isRequired, // eslint-disable-line react/no-unused-prop-types
-  pristine: PropTypes.bool.isRequired, // added by redux-form
-  submitting: PropTypes.bool.isRequired, // added by redux-form
-  handleSubmit: PropTypes.func.isRequired // added by redux-form (calls onSubmit)
+  classes: PropTypes.object.isRequired, // from enhancer (withStyles)
+  handleSubmit: PropTypes.func
 }
 
 export default LoginForm

@@ -1,6 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
-import { isEmpty } from 'react-redux-firebase'
+import PropTypes from 'prop-types'<% if (includeRedux) { %>
+import { isEmpty } from 'react-redux-firebase'<% } %>
 import { Route, Switch } from 'react-router-dom'
 import ProjectRoute from 'routes/Projects/routes/Project'
 import ProjectTile from '../ProjectTile'
@@ -36,7 +36,7 @@ const ProjectsPage = ({
           />
           <div className={classes.tiles}>
             <NewProjectTile onClick={toggleDialog} />
-            {!isEmpty(projects) &&
+            {<% if (includeRedux) { %>!isEmpty(projects)<% } %><% if (!includeRedux) { %>projects && projects.length<% } %> &&
               projects.map((project, ind) => (
                 <ProjectTile
                   key={`Project-${project.<% if (includeRedux && includeFirestore) { %>id<% } else { %>key<% } %>}-${ind}`}
