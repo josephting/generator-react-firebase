@@ -1,19 +1,34 @@
 import PropTypes from 'prop-types'
-import { compose, setPropTypes } from 'recompose'
+import { compose, setPropTypes<% if (includeRedux) { %>, withStateHandlers, withHandlers<% } %> } from 'recompose'
+import { withStyles } from '@material-ui/core/styles'<% if (includeRedux) { %>
 import { reduxForm } from 'redux-form'
-import { LOGIN_FORM_NAME } from 'constants/formNames'
-import { withStyles } from '@material-ui/core/styles'
+import { LOGIN_FORM_NAME } from 'constants/formNames'<% } %>
 import styles from './LoginForm.styles'
 
 export default compose(
   // Set proptypes used in HOCs
   setPropTypes({
     onSubmit: PropTypes.func.isRequired // called by handleSubmit
-  }),
-  // Add Form Capabilities
+  }),<% if (includeRedux) { %>
+  // Add form capabilities (handleSubmit, pristine, submitting)
   reduxForm({
     form: LOGIN_FORM_NAME
+  }),<% } %><% if (!includeRedux) { %>
+  // Add state handlers as props
+  withStateHandlers({}, {
+    handleEmailChange: ({ email }) => (e) => ({
+      email: e.target.value,
+    }),
+    handlePasswordChange: props => value => ({
+      password: e.target.value,
+    })
   }),
+  // Add handlers as props
+  withHandlers({
+    handleSubmit: ({ email, password, onSubmit }) => () => {
+      onSubmit({ email, password })
+    },
+  }),<% } %>
   // Add styles as props.classes
   withStyles(styles)
 )

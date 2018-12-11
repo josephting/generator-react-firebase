@@ -1,7 +1,5 @@
 import PropTypes from 'prop-types'
 import { compose, setPropTypes } from 'recompose'
-import { reduxForm } from 'redux-form'
-import { LOGIN_FORM_NAME } from 'constants/formNames'
 import { withStyles } from '@material-ui/core/styles'
 import styles from './LoginForm.styles'
 
@@ -10,9 +8,20 @@ export default compose(
   setPropTypes({
     onSubmit: PropTypes.func.isRequired // called by handleSubmit
   }),
-  // Add Form Capabilities
-  reduxForm({
-    form: LOGIN_FORM_NAME
+  // Add state handlers as props
+  withStateHandlers({}, {
+    handleEmailChange: ({ email }) => (e) => ({
+      email: e.target.value,
+    }),
+    handlePasswordChange: props => value => ({
+      password: e.target.value,
+    })
+  }),
+  // Add handlers as props
+  withHandlers({
+    handleSubmit: ({ email, password, onSubmit }) => () => {
+      onSubmit({ email, password })
+    },
   }),
   // Add styles as props.classes
   withStyles(styles)

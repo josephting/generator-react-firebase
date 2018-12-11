@@ -42,20 +42,20 @@ LoginForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired // from enhancer (reduxForm - calls onSubmit)
 }
 
-export default LoginForm<% } %><% if (!includeRedux) { %>const LoginForm = ({ classes, handleSubmit, error }) => (
+export default LoginForm<% } %><% if (!includeRedux) { %>const LoginForm = ({ classes, handleSubmit, handleEmailChange, handlePasswordChange }) => (
   <form className={classes.root} onSubmit={handleSubmit}>
     <div>
       <TextField
         hintText='someone@email.com'
         floatingLabelText='Email'
-        errorText={error || null}
+        onChange={handleEmailChange}
       />
     </div>
     <div>
       <TextField
         type='password'
         floatingLabelText='Password'
-        errorText={error || null}
+        onChange={handlePasswordChange}
       />
     </div>
     <div className={classes.submit}>
@@ -72,7 +72,9 @@ export default LoginForm<% } %><% if (!includeRedux) { %>const LoginForm = ({ cl
 
 LoginForm.propTypes = {
   classes: PropTypes.object.isRequired, // from enhancer (withStyles)
-  handleSubmit: PropTypes.func
+  handleEmailChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handlePasswordChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handleSubmit: PropTypes.func.isRequired // from enhancer (withHandlers - calls onSubmit)
 }
 
 export default LoginForm<% } %>

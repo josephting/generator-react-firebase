@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import TextField from '@material-ui/core/TextField'
 import Button from '@material-ui/core/Button'
 
-const SignupForm = ({ classes, handleSubmit }) => (
+const SignupForm = ({ classes, handleSubmit, handleEmailChange, handlePasswordChange }) => (
   <form className={classes.root} onSubmit={handleSubmit}>
     <div>
       <TextField label='Username' />
@@ -12,12 +12,14 @@ const SignupForm = ({ classes, handleSubmit }) => (
       <TextField
         hintText='someone@email.com'
         label='Email'
+        onChange={handleEmailChange}
       />
     </div>
     <div>
       <TextField
         label='Password'
         type="password"
+        onChange={handlePasswordChange}
       />
     </div>
     <div className={classes.submit}>
@@ -34,7 +36,9 @@ const SignupForm = ({ classes, handleSubmit }) => (
 
 SignupForm.propTypes = {
   classes: PropTypes.object.isRequired, // from enhancer (withStyles)
-  handleSubmit: PropTypes.func
+  handleEmailChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handlePasswordChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handleSubmit: PropTypes.func.isRequired // from enhancer (withHandlers - calls onSubmit)
 }
 
 export default SignupForm

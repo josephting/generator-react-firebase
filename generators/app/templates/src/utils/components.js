@@ -1,10 +1,10 @@
 /* eslint-disable no-console */
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import { pick, some } from 'lodash'
-import { isLoaded } from 'react-redux-firebase'
-import LoadableComponent from 'react-loadable'
 import { mapProps, branch, renderComponent } from 'recompose'
+import LoadableComponent from 'react-loadable'<% if (includeRedux) { %>
+import { pick, some } from 'lodash'
+import { isLoaded } from 'react-redux-firebase'<% } %>
 import LoadingSpinner from 'components/LoadingSpinner'
 
 /**
@@ -13,10 +13,11 @@ import LoadingSpinner from 'components/LoadingSpinner'
  * @param  {Function} condition - Condition function for when to show spinner
  * @return {HigherOrderComponent}
  */
-export const spinnerWhile = condition =>
-  branch(condition, renderComponent(LoadingSpinner))
+export function spinnerWhile(condition) {
+  return branch(condition, renderComponent(LoadingSpinner))
+}
 
-/**
+<% if (includeRedux) { %>/**
  * Show a loading spinner while props are loading . Checks
  * for undefined, null, or a value (as well as handling `auth.isLoaded` and
  * `profile.isLoaded`). **NOTE:** Meant to be used with props which are passed
@@ -59,14 +60,15 @@ export const spinnerWhileLoading = propNames =>
  * are logged
  * @return {HigherOrderComponent}
  */
-export const logProps = (propNames, logName = '') =>
-  mapProps(ownerProps => {
+export function logProps(propNames, logName = '') {
+  return mapProps(ownerProps => {
     console.log(
       `${logName} props:`,
       propNames ? pick(ownerProps, propNames) : ownerProps
     )
     return ownerProps
   })
+}
 
 export function createWithFromContext(withVar) {
   return WrappedComponent => {
@@ -92,7 +94,7 @@ export function createWithFromContext(withVar) {
  * HOC that adds store to props
  * @return {HigherOrderComponent}
  */
-export const withStore = createWithFromContext('store')
+export const withStore = createWithFromContext('store')<% } %>
 
 /**
  * Create component which is loaded async, showing a loading spinner

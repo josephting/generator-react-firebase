@@ -49,7 +49,7 @@ SignupForm.propTypes = {
   handleSubmit: PropTypes.func.isRequired // from enhancer (reduxForm - calls onSubmit)
 }
 
-export default SignupForm<% } %><% if (!includeRedux) { %>const SignupForm = ({ classes, handleSubmit }) => (
+export default SignupForm<% } %><% if (!includeRedux) { %>const SignupForm = ({ classes, handleSubmit, handleEmailChange, handlePasswordChange }) => (
   <form className={classes.root} onSubmit={handleSubmit}>
     <div>
       <TextField label='Username' />
@@ -58,12 +58,14 @@ export default SignupForm<% } %><% if (!includeRedux) { %>const SignupForm = ({ 
       <TextField
         hintText='someone@email.com'
         label='Email'
+        onChange={handleEmailChange}
       />
     </div>
     <div>
       <TextField
         label='Password'
         type="password"
+        onChange={handlePasswordChange}
       />
     </div>
     <div className={classes.submit}>
@@ -80,7 +82,9 @@ export default SignupForm<% } %><% if (!includeRedux) { %>const SignupForm = ({ 
 
 SignupForm.propTypes = {
   classes: PropTypes.object.isRequired, // from enhancer (withStyles)
-  handleSubmit: PropTypes.func
+  handleEmailChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handlePasswordChange: PropTypes.func.isRequired, // from enhancer (withStateHandlers)
+  handleSubmit: PropTypes.func.isRequired // from enhancer (withHandlers - calls onSubmit)
 }
 
 export default SignupForm<% } %>
