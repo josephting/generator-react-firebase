@@ -12,7 +12,7 @@ module.exports = {
   }<% if(includeFunctionsTests) { %>,
   overrides: [
     {
-      files: ['src/**/*.spec.js'],
+      files: ['scripts/**', 'src/**/*.spec.js'],
       env: {
         mocha: true
       },
@@ -24,7 +24,8 @@ module.exports = {
         'no-console': 0,
         'import/no-dynamic-require': 0,
         'no-unused-expressions': 0,
-        'import/prefer-default-export': 0
+        'import/prefer-default-export': 0,
+        'import/no-extraneous-dependencies': 0
       }
     }
   ]<% } %>

@@ -41,6 +41,6 @@ files.forEach(functionFile => {
 
   // Load single function from default
   !process.env.FUNCTION_NAME || process.env.FUNCTION_NAME === folderName // eslint-disable-line no-unused-expressions
-    ? (exports[folderName] = require(functionFile).default) // eslint-disable-line global-require
+    ? (exports[folderName] = require(functionFile).default) // eslint-disable-line global-require, import/no-dynamic-require
     : () => {}
 })
