@@ -13,7 +13,7 @@
 
 ## Installation
 
-Install [Yeoman](http://yeoman.io) and generator-react-firebase using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)):
+Install [Yeoman](https://yeoman.io) and generator-react-firebase using [npm](https://www.npmjs.com/) (we assume you have pre-installed [node.js](https://nodejs.org/)):
 
 ```bash
 npm install -g yo generator-react-firebase
@@ -60,12 +60,12 @@ npm install -g yo generator-react-firebase
 * [react](https://facebook.github.io/react/) - Rendering + Components
 * [react-router](https://github.com/ReactTraining/react-router) - Routing (including async route loading)
 * [material-ui](https://material-ui.com) - Google Material Styling React Components
-* [eslint](http://eslint.org/) - Linting (also implements [`prettier`](https://github.com/prettier/prettier-eslint))
+* [eslint](https://eslint.org/) - Linting (also implements [`prettier`](https://github.com/prettier/prettier-eslint))
 * [react-loadable](https://github.com/jamiebuilds/react-loadable) - HOC for async route/component chunk loading
 
 *When opting into redux*
 
-* [redux](http://redux.js.org/) - Client Side state *optional*
+* [redux](https://redux.js.org/) - Client Side state *optional*
 * [react-redux-firebase](https://react-redux-firebase.com) - Easily Persist results of Firebase queries to redux state
 * [redux-auth-wrapper](https://github.com/mjrussell/redux-auth-wrapper) - Easily create HOCs for route/component protection based on auth state
 * [redux-form](redux-form.com) - Form input validation + state
@@ -523,7 +523,7 @@ For full projects built out using this as a starting place, check the next secti
 
 ## License
 
-MIT © [Prescott Prue](http://prue.io)
+MIT © [Prescott Prue](https://prue.io)
 
 [npm-image]: https://img.shields.io/npm/v/generator-react-firebase.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/generator-react-firebase
@@ -539,7 +539,7 @@ MIT © [Prescott Prue](http://prue.io)
 [license-image]: https://img.shields.io/npm/l/generator-react-firebase.svg?style=flat-square
 [license-url]: https://github.com/prescottprue/generator-react-firebase/blob/master/LICENSE
 [code-style-image]: https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat-square
-[code-style-url]: http://standardjs.com/
+[code-style-url]: https://standardjs.com/
 [gitter-image]: https://img.shields.io/gitter/room/nwjs/nw.js.svg?style=flat-square
 [gitter-url]: https://gitter.im/prescottprue/generator-react-firebase
 [firebase-ci-url]: https://github.com/prescottprue/firebase-ci
