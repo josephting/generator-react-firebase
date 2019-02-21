@@ -528,7 +528,7 @@ MIT © [Prescott Prue](http://prue.io)
 [npm-image]: https://img.shields.io/npm/v/generator-react-firebase.svg?style=flat-square
 [npm-url]: https://npmjs.org/package/generator-react-firebase
 [npm-downloads-image]: https://img.shields.io/npm/dm/generator-react-firebase.svg?style=flat-square
-[quality-image]: http://npm.packagequality.com/shield/generator-react-firebase.svg?style=flat-square
+[quality-image]: https://npm.packagequality.com/shield/generator-react-firebase.svg?style=flat-square
 [quality-url]: https://packagequality.com/#?package=generator-react-firebase
 [travis-image]: https://img.shields.io/travis/prescottprue/generator-react-firebase/master.svg?style=flat-square
 [travis-url]: https://travis-ci.org/prescottprue/generator-react-firebase
